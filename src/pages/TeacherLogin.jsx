@@ -12,7 +12,7 @@ const TeacherLogin = () => {
   const { loginAs } = useAuth()
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+     e.preventDefault() //
     try {
       const response = await axios.post('http://localhost:2910/teacherapi/login', formData)
       if (response.status === 200) {

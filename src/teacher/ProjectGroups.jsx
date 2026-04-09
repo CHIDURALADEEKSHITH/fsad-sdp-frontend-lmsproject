@@ -39,7 +39,7 @@ const ProjectGroups = () => {
       fetchGroups()
     } catch (err) {
       setError('Error creating group')
-    }
+    }//
   }
 
   const handleDeleteGroup = async (groupId) => {

@@ -14,7 +14,7 @@ const TeacherHome = () => {
         </div>
         <span className="teacher-welcome-badge">Faculty</span>
       </div>
-
+//
       <div className="teacher-stats-grid">
         <div className="teacher-stat-card">
           <span className="teacher-stat-label">Projects Assigned</span>

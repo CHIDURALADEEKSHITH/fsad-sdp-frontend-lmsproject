@@ -4,7 +4,7 @@ import './Style.css'
 const Home = () => {
   return (
     <div className="home-page">
-      <div className="home-hero">
+//      <div className="home-hero">
         <h1 className="home-title">Group Project  Submissions Portal</h1>
         <p className="home-subtitle">A centralized platform to manage, submit and review academic group projects</p>
       </div>

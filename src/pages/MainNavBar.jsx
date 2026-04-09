@@ -8,7 +8,7 @@ import TeacherLogin from './TeacherLogin'
 import PageNotFound from './PageNotFound'
 
 const MainNavBar = () => {
-  return (
+  return ( //
     <>
       <nav className="navbar">
         <div className="navbar-brand">Group Project  Submission Portal</div>

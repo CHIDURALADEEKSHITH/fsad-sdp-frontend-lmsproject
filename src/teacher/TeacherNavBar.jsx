@@ -8,7 +8,7 @@ import SubjectProjects from './SubjectProjects'
 import ProjectGroups from './ProjectGroups'
 import PageNotFound from '../pages/PageNotFound'
 import { useAuth } from '../context/AuthContext'
-
+//
 const TeacherNavBar = () => {
   const navigate = useNavigate()
   const { logout } = useAuth()

@@ -10,7 +10,7 @@ const ViewSubjects = () => {
   const navigate = useNavigate()
 
   const teacher = JSON.parse(sessionStorage.getItem('loggedInTeacher'))
-
+//
   useEffect(() => {
     const fetchSubjects = async () => {
       try {

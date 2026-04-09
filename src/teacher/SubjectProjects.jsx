@@ -17,7 +17,7 @@ const SubjectProjects = () => {
     title: '',
     description: '',
     deadline: ''
-  })
+  })//
 
   const fetchProjects = async () => {
     try {

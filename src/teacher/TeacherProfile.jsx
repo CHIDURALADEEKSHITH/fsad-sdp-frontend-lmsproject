@@ -4,7 +4,7 @@ import './Teacher.css'
 
 const TeacherProfile = () => {
   const teacher = JSON.parse(sessionStorage.getItem('loggedInTeacher'))
-
+//
   const [formData, setFormData] = useState({
     id: teacher?.id || '',
     contact: teacher?.contact || '',
