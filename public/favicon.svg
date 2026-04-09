@@ -1,0 +1,16 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="vite-grad" cx="50%" cy="50%" r="80%">
+      <stop offset="0%" stop-color="#d8b4fe" />
+      <stop offset="40%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </radialGradient>
+    <linearGradient id="bolt-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#facc15" />
+      <stop offset="100%" stop-color="#f97316" />
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="20" fill="#0f172a" />
+  <path d="M28 20 L72 20 L64 44 L80 44 L40 88 L48 64 L32 64 Z" fill="url(#vite-grad)" />
+  <path d="M40 24 L58 24 L46 52 L68 52 L34 88 L44 60 L30 60 Z" fill="url(#bolt-grad)" />
+</svg>
