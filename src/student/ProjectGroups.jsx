@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import './Student.css'
 
+const API = 'http://localhost:2910'
+
 const ProjectGroups = () => {
   const { projectId } = useParams()
   const student = JSON.parse(sessionStorage.getItem('loggedInStudent'))
@@ -11,183 +13,199 @@ const ProjectGroups = () => {
   const [loading, setLoading] = useState(true)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
-
   const [members, setMembers] = useState([])
   const [selectedGroupId, setSelectedGroupId] = useState(null)
+  const [joinedGroupId, setJoinedGroupId] = useState(null)
 
-  const [joinedGroupId, setJoinedGroupId] = useState(student?.group?.id || null)
+  const [file, setFile] = useState(null)
+  const [submission, setSubmission] = useState(null)
 
-  const findJoinedGroupId = (groupsData) => {
-    if (!student?.id) return null
-    const studentId = student.id
-    const matchedGroup = groupsData.find((g) => {
-      const members = g.members || g.students || g.studentsList || []
-      if (Array.isArray(members) && members.some((m) => m?.id === studentId || m?.studentId === studentId)) {
-        return true
-      }
-      if (g.leader?.id === studentId) return true
-      return false
-    })
-    return matchedGroup ? matchedGroup.id : null
-  }
-
+  // ---------------- FETCH GROUPS ----------------
   const fetchGroups = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:2910/studentapi/viewgroupsbyproject?projectId=${projectId}`
-      )
-      const groupsData = Array.isArray(response.data) ? response.data : []
+      const res = await axios.get(`${API}/studentapi/viewgroupsbyproject`, {
+        params: { projectId }
+      })
+
+      const groupsData = res.data || []
       setGroups(groupsData)
 
-      const detectedGroupId = findJoinedGroupId(groupsData)
-      if (detectedGroupId && detectedGroupId !== joinedGroupId) {
-        setJoinedGroupId(detectedGroupId)
-        sessionStorage.setItem(
-          'loggedInStudent',
-          JSON.stringify({ ...student, group: { id: detectedGroupId } })
-        )
-      }
-    } catch (err) {
+      const joined = groupsData.find(g =>
+        g.members?.some(m => m.id === student.id)
+      )
+
+      setJoinedGroupId(joined?.id || null)
+
+    } catch {
       setError('Error fetching groups')
     } finally {
       setLoading(false)
     }
   }
 
+  // ---------------- FETCH MEMBERS ----------------
   const fetchMembers = async (groupId) => {
     try {
-      const response = await axios.get(
-        'http://localhost:2910/studentapi/viewmembersbygroup',
-        { params: { groupId } }
-      )
-      setMembers(response.data)
-    } catch (err) {
+      const res = await axios.get(`${API}/studentapi/viewmembersbygroup`, {
+        params: { groupId }
+      })
+      setMembers(res.data || [])
+    } catch {
+      setMembers([])
       setError('Error fetching members')
+    }
+  }
+
+  // ---------------- FETCH SUBMISSION ----------------
+  const fetchSubmission = async (groupId) => {
+    try {
+      const res = await axios.get(`${API}/studentapi/viewsubmissionsbygroup`, {
+        params: { groupId }
+      })
+
+      if (res.data.length > 0) {
+        setSubmission(res.data[0])
+      } else {
+        setSubmission(null)
+      }
+    } catch {
+      setSubmission(null)
     }
   }
 
   useEffect(() => {
     fetchGroups()
-  }, [])
+  }, [projectId])
 
+  // ---------------- JOIN GROUP ----------------
   const handleJoinGroup = async (groupId) => {
-    if (joinedGroupId) {
-      setError('You have already joined a group. You cannot join another group.')
+    try {
+      const res = await axios.post(`${API}/studentapi/joingroup`, null, {
+        params: { groupId, studentId: student.id }
+      })
+
+      setMessage(res.data)
+      setError('')
+      fetchGroups()
+
+    } catch (err) {
+      setError(err.response?.data || 'Error joining group')
+    }
+  }
+
+  // ---------------- UPLOAD PDF ----------------
+  const handleUpload = async () => {
+    if (!file) {
+      alert("Please select a PDF file")
       return
     }
 
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("groupId", selectedGroupId)
+    formData.append("studentId", student.id)
+
     try {
-      const response = await axios.post(
-        `http://localhost:2910/studentapi/joingroup?groupId=${groupId}&studentId=${student?.id}`
-      )
-
-      setMessage(response.data)
-      setError('')
-
-      // ✅ update state instantly
-      setJoinedGroupId(groupId)
-
-      // ✅ update session (important)
-      const updatedStudent = { ...student, group: { id: groupId } }
-      sessionStorage.setItem('loggedInStudent', JSON.stringify(updatedStudent))
-
-      fetchGroups()
-    } catch (err) {
-      setError('Error joining group')
+      await axios.post(`${API}/studentapi/uploadpdf`, formData)
+      alert("Uploaded Successfully")
+      fetchSubmission(selectedGroupId)
+    } catch {
+      alert("Upload failed")
     }
   }
 
   return (
     <div>
-      <div className="student-section-card">
-        <div className="student-section-header">
-          <h2>Available Groups</h2>
-          <p>Join a group for this project</p>
-        </div>
 
-        {message && <div className="student-success">{message}</div>}
-        {error && <div className="student-error">{error}</div>}
+      {/* GROUP LIST */}
+      <div className="student-section-card">
+        <h2>Available Groups</h2>
+
+        {message && <p style={{ color: 'green' }}>{message}</p>}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
 
         {loading ? (
-          <p className="student-loading">Loading groups...</p>
-        ) : groups.length === 0 ? (
-          <p className="student-loading">No groups available yet</p>
+          <p>Loading...</p>
         ) : (
-          <div className="student-group-grid">
-            {groups.map((g, index) => (
-              <div
-                key={g.id}
-                className="student-group-card"
-                onClick={() => {
-                  setSelectedGroupId(g.id)
-                  fetchMembers(g.id)
-                }}
-              >
-                <div className="student-group-card-header">
-                  <span className="student-group-name">
-                    Group {index + 1}
-                  </span>
-                  <span className="student-group-badge">
-                    Max: {g.maxMembers}
-                  </span>
-                </div>
+          groups.map((g, index) => (
+            <div
+              key={g.id}
+              className="student-group-card"
+              onClick={() => {
+                setSelectedGroupId(g.id)
+                fetchMembers(g.id)
+                fetchSubmission(g.id)
+              }}
+            >
+              <h3>Group {index + 1}</h3>
 
-                <span className="student-group-info">
-                  Leader: {g.leader ? g.leader.name : 'Not Assigned'}
-                </span>
-                {joinedGroupId === g.id ? (
-                  <button className="student-join-btn" disabled>
-                    Already Joined
-                  </button>
-                ) : (
-                  <button
-                    className="student-join-btn"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleJoinGroup(g.id)
-                    }}
-                  >
-                    Join Group
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
+              <p>Leader: {g.leader ? g.leader.name : "Not Assigned"}</p>
+              <p>Members: {g.members?.length || 0}</p>
+
+              {joinedGroupId === g.id ? (
+                <button disabled>Already Joined</button>
+              ) : (
+                <button onClick={(e) => {
+                  e.stopPropagation()
+                  handleJoinGroup(g.id)
+                }}>
+                  Join Group
+                </button>
+              )}
+            </div>
+          ))
         )}
       </div>
 
-      
+      {/* MEMBERS */}
       {selectedGroupId && (
         <div className="student-section-card">
-          <div className="student-section-header">
-            <h2>
-              Group {groups.findIndex(g => g.id === selectedGroupId) + 1} Members
-            </h2>
-            <p>
-              Members in Group {groups.findIndex(g => g.id === selectedGroupId) + 1}
-            </p>
-          </div>
+          <h2>Members</h2>
 
           {members.length === 0 ? (
-            <p className="student-loading">
-              No members in this group yet
-            </p>
+            <p>No members yet</p>
           ) : (
-            <div className="student-members-list">
-              {members.map((member) => (
-                <div key={member.id} className="student-member-item">
-                  <span className="student-member-id">
-                    ID: {member.id}
-                  </span>
-                  <span className="student-member-name">
-                    {member.name}
-                  </span>
-                </div>
-              ))}
-            </div>
+            members.map(m => (
+              <p key={m.id}>{m.name}</p>
+            ))
           )}
         </div>
       )}
+
+      {/* 🔥 SUBMISSION SECTION */}
+      {joinedGroupId === selectedGroupId && (
+        <div className="student-section-card">
+          <h2>Submission</h2>
+
+          {submission ? (
+            <>
+              <p><b>File:</b> {submission.fileName}</p>
+              <p><b>Marks:</b> {submission.marks || "Not Given"}</p>
+
+              <a
+                href={`${API}/studentapi/downloadsubmission?submissionId=${submission.id}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Download PDF
+              </a>
+            </>
+          ) : (
+            <>
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
+
+              <button onClick={handleUpload}>
+                Submit PDF
+              </button>
+            </>
+          )}
+        </div>
+      )}
+
     </div>
   )
 }

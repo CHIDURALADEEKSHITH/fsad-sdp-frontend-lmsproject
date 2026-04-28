@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './Teacher.css'
 
+const API = 'http://localhost:2910'
+
 const SubjectProjects = () => {
   const { coursecode } = useParams()
   const navigate = useNavigate()
@@ -12,16 +14,19 @@ const SubjectProjects = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
+  const [file, setFile] = useState(null)
 
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     deadline: ''
-  })//
+  })
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get(`http://localhost:2910/teacherapi/viewprojectsbysubject?coursecode=${coursecode}`)
+      const response = await axios.get(`${API}/teacherapi/viewprojectsbysubject`, {
+        params: { coursecode }
+      })
       setProjects(response.data)
     } catch (err) {
       setError('Error fetching projects')
@@ -30,36 +35,75 @@ const SubjectProjects = () => {
     }
   }
 
-  useEffect(() => { fetchProjects() }, [])
+  useEffect(() => {
+    setProjects([])
+    setLoading(true)
+    setError('')
+    fetchProjects()
+  }, [coursecode])
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0]
+
+    if (selectedFile && selectedFile.type !== 'application/pdf') {
+      setError('Only PDF files are allowed')
+      setFile(null)
+      return
+    }
+
+    setError('')
+    setFile(selectedFile)
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+
     try {
-      const response = await axios.post(
-        `http://localhost:2910/teacherapi/addproject?coursecode=${coursecode}&teacherId=${teacher?.id}`,
-        formData
-      )
+      const data = new FormData()
+      data.append('title', formData.title)
+      data.append('description', formData.description)
+      data.append('deadline', formData.deadline)
+      data.append('coursecode', coursecode)
+      data.append('teacherId', teacher?.id)
+
+      if (file) {
+        data.append('file', file)
+      }
+
+      const response = await axios.post(`${API}/teacherapi/addprojectwithfile`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+
       setMessage(response.data)
       setError('')
       setFormData({ title: '', description: '', deadline: '' })
+      setFile(null)
       fetchProjects()
     } catch (err) {
-      setError('Error adding project')
+      setError(err.response?.data || 'Error adding project')
     }
   }
 
   const handleDelete = async (projectId) => {
     try {
-      await axios.delete(`http://localhost:2910/teacherapi/deleteproject?projectId=${projectId}`)
+      await axios.delete(`${API}/teacherapi/deleteproject`, {
+        params: { projectId }
+      })
       setMessage('Project Deleted Successfully')
       fetchProjects()
     } catch (err) {
       setError('Error deleting project')
     }
+  }
+
+  const downloadProjectFile = (projectId) => {
+    window.open(`${API}/teacherapi/downloadprojectfile?projectId=${projectId}`, '_blank')
   }
 
   return (
@@ -74,19 +118,56 @@ const SubjectProjects = () => {
           <div className="teacher-form-grid">
             <div className="teacher-form-item">
               <label className="teacher-form-label">Title</label>
-              <input type="text" name="title" placeholder="Enter project title" value={formData.title} onChange={handleChange} required maxLength={100} />
+              <input
+                type="text"
+                name="title"
+                placeholder="Enter project title"
+                value={formData.title}
+                onChange={handleChange}
+                required
+                maxLength={100}
+              />
             </div>
+
             <div className="teacher-form-item">
               <label className="teacher-form-label">Deadline</label>
-              <input type="date" name="deadline" value={formData.deadline} onChange={handleChange} required />
+              <input
+                type="date"
+                name="deadline"
+                value={formData.deadline}
+                onChange={handleChange}
+                required
+              />
             </div>
+
             <div className="teacher-form-item" style={{ gridColumn: '1 / -1' }}>
               <label className="teacher-form-label">Description</label>
-              <input type="text" name="description" placeholder="Enter project description" value={formData.description} onChange={handleChange} required maxLength={255} />
+              <input
+                type="text"
+                name="description"
+                placeholder="Enter project description"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                maxLength={255}
+              />
             </div>
-            <button type="submit" className="teacher-primary-btn">Add Project</button>
+
+            <div className="teacher-form-item" style={{ gridColumn: '1 / -1' }}>
+              <label className="teacher-form-label">Project File PDF Optional</label>
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={handleFileChange}
+              />
+            </div>
+
+            <button type="submit" className="teacher-primary-btn">
+              Add Project
+            </button>
           </div>
         </form>
+
         {message && <div className="teacher-success">{message}</div>}
         {error && <div className="teacher-error">{error}</div>}
       </div>
@@ -96,6 +177,7 @@ const SubjectProjects = () => {
           <h2>All Projects</h2>
           <p>Click on a project to manage groups</p>
         </div>
+
         {loading ? (
           <p className="teacher-loading">Loading projects...</p>
         ) : projects.length === 0 ? (
@@ -106,10 +188,26 @@ const SubjectProjects = () => {
               <div key={p.id} className="teacher-project-card">
                 <div className="teacher-project-card-header">
                   <span className="teacher-project-title">{p.title}</span>
-                  <button className="teacher-danger-btn" onClick={() => handleDelete(p.id)}>Delete</button>
+                  <button
+                    className="teacher-danger-btn"
+                    onClick={() => handleDelete(p.id)}
+                  >
+                    Delete
+                  </button>
                 </div>
+
                 <span className="teacher-project-desc">{p.description}</span>
                 <span className="teacher-project-deadline">Deadline: {p.deadline}</span>
+
+                {p.fileName && (
+                  <button
+                    className="teacher-secondary-btn"
+                    onClick={() => downloadProjectFile(p.id)}
+                  >
+                    Download Project File
+                  </button>
+                )}
+
                 <button
                   className="teacher-view-btn"
                   onClick={() => navigate(`/teacher/projectgroups/${p.id}`)}

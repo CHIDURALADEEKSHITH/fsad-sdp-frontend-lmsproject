@@ -593,3 +593,332 @@
   padding: 2px 8px;
   border-radius: 20px;
 }
+
+/* ─── TEACHER SUBMISSIONS ─── */
+.teacher-submissions-container {
+  padding: 28px 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.teacher-submissions-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.teacher-submissions-card h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px;
+}
+
+.teacher-submissions-subtitle {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+.teacher-submission-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.teacher-submission-item .submission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.teacher-submission-item .submission-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 6px;
+}
+
+.teacher-submission-item .submission-group {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.teacher-submission-item .submission-date {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.teacher-submission-item .submission-details {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.teacher-submission-item .detail-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.teacher-submission-item .detail-label {
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.85rem;
+  min-width: 100px;
+}
+
+.teacher-submission-item .detail-value {
+  color: #1e293b;
+  font-size: 0.9rem;
+}
+
+.teacher-submission-item .submission-evaluation {
+  margin-top: 12px;
+}
+
+.evaluation-form {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.evaluation-form .form-group {
+  margin-bottom: 14px;
+}
+
+.evaluation-form label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.evaluation-form input,
+.evaluation-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.evaluation-form input:focus,
+.evaluation-form textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.evaluation-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.teacher-primary-btn {
+  padding: 10px 20px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.teacher-primary-btn:hover {
+  background: #2563eb;
+}
+
+.teacher-primary-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.teacher-secondary-btn {
+  padding: 10px 20px;
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.teacher-secondary-btn:hover {
+  background: #e2e8f0;
+}
+
+.evaluation-display {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.marks-badge-large {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #10b981;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.marks-badge-large .marks-value {
+  font-size: 1.4rem;
+}
+
+.teacher-submission-item .feedback-display {
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.teacher-submission-item .feedback-label {
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.85rem;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.teacher-submission-item .feedback-text {
+  color: #1e293b;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.evaluated-info {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+/* ─── TEACHER SUBMISSIONS LIST IN PROJECT GROUPS ─── */
+.teacher-submissions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.teacher-submission-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.teacher-submission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.teacher-submission-file {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.teacher-submission-date {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.teacher-submission-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #475569;
+  margin-bottom: 12px;
+}
+
+.teacher-submission-marks {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.teacher-marks-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #10b981;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.teacher-feedback {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+.teacher-submission-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.teacher-evaluation-form {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.teacher-evaluation-form h4 {
+  margin: 0 0 16px;
+  font-size: 1rem;
+  color: #1e293b;
+}
+
+.teacher-form-item {
+  margin-bottom: 14px;
+}
+
+.teacher-form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.teacher-form-item input,
+.teacher-form-item textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.teacher-form-item input:focus,
+.teacher-form-item textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.teacher-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}

@@ -14,7 +14,7 @@ const ViewSubjects = () => {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const response = await axios.get(`http://localhost:2910/teacherapi/viewsubjectbydepartment?department=${teacher?.department}`)
+        const response = await axios.get(`/teacherapi/viewsubjectbydepartment?department=${teacher?.department}`)
         setSubjects(response.data)
       } catch (err) {
         setError('Error fetching subjects')
@@ -65,3 +65,4 @@ const ViewSubjects = () => {
 }
 
 export default ViewSubjects
+

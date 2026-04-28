@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './Student.css'
 
+const API = 'http://localhost:2910'
+
 const SubjectProjects = () => {
   const { coursecode } = useParams()
   const navigate = useNavigate()
@@ -13,8 +15,13 @@ const SubjectProjects = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
+      setLoading(true)
+      setError('')
+
       try {
-        const response = await axios.get(`http://localhost:2910/studentapi/viewprojectsbysubject?coursecode=${coursecode}`)
+        const response = await axios.get(`${API}/studentapi/viewprojectsbysubject`, {
+          params: { coursecode }
+        })
         setProjects(response.data)
       } catch (err) {
         setError('Error fetching projects')
@@ -22,8 +29,14 @@ const SubjectProjects = () => {
         setLoading(false)
       }
     }
+
     fetchProjects()
-  }, [])
+  }, [coursecode])
+
+  const downloadProjectFile = (projectId, e) => {
+    e.stopPropagation()
+    window.open(`${API}/teacherapi/downloadprojectfile?projectId=${projectId}`, '_blank')
+  }
 
   return (
     <div>
@@ -32,7 +45,9 @@ const SubjectProjects = () => {
           <h2>Projects — {coursecode}</h2>
           <p>Click on a project to view groups</p>
         </div>
+
         {error && <div className="student-error">{error}</div>}
+
         {loading ? (
           <p className="student-loading">Loading projects...</p>
         ) : projects.length === 0 ? (
@@ -48,6 +63,16 @@ const SubjectProjects = () => {
                 <span className="student-project-title">{p.title}</span>
                 <span className="student-project-desc">{p.description}</span>
                 <span className="student-project-deadline">Deadline: {p.deadline}</span>
+
+                {p.fileName && (
+                  <button
+                    className="student-secondary-btn"
+                    onClick={(e) => downloadProjectFile(p.id, e)}
+                  >
+                    Download Project File
+                  </button>
+                )}
+
                 <span className="student-subject-view">View Groups →</span>
               </div>
             ))}

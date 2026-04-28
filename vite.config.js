@@ -5,6 +5,20 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port:"3000"
+    port: "3000",
+    proxy: {
+      '/studentapi': {
+        target: 'http://localhost:2910',
+        changeOrigin: true
+      },
+      '/teacherapi': {
+        target: 'http://localhost:2910',
+        changeOrigin: true
+      },
+      '/adminapi': {
+        target: 'http://localhost:2910',
+        changeOrigin: true
+      }
+    }
   }
 })

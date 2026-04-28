@@ -6,6 +6,9 @@ import StudentProfile from './StudentProfile'
 import ViewSubjects from './ViewSubjects'
 import SubjectProjects from './SubjectProjects'
 import ProjectGroups from './ProjectGroups'
+import SubmitProject from './SubmitProject'
+import ViewSubmissions from './ViewSubmissions'
+import MyGroups from './MyGroups'
 import PageNotFound from '../pages/PageNotFound'
 import { useAuth } from '../context/AuthContext'
 
@@ -26,6 +29,7 @@ const StudentNavBar = () => {
           <li><Link to="/student/home">Home</Link></li>
           <li><Link to="/student/profile">Profile</Link></li>
           <li><Link to="/student/viewsubjects">Subjects</Link></li>
+          <li><Link to="/student/mygroups">My Groups</Link></li>
           <li><button type="button" onClick={handleLogout}>Logout</button></li>
         </ul>
       </nav>
@@ -37,6 +41,9 @@ const StudentNavBar = () => {
           <Route path="/student/viewsubjects" element={<ViewSubjects />} />
           <Route path="/student/subjectprojects/:coursecode" element={<SubjectProjects />} />
           <Route path="/student/projectgroups/:projectId" element={<ProjectGroups />} />
+          <Route path="/student/submitproject/:groupId" element={<SubmitProject />} />
+          <Route path="/student/viewsubmissions/:groupId" element={<ViewSubmissions />} />
+          <Route path="/student/mygroups" element={<MyGroups />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </main>
@@ -45,3 +52,4 @@ const StudentNavBar = () => {
 }
 
 export default StudentNavBar
+

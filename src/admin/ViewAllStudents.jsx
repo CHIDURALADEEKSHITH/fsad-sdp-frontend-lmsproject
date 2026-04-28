@@ -23,7 +23,7 @@ const ViewAllStudents = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:2910/adminapi/deletestudent/${id}`)
+      await axios.delete(`/adminapi/deletestudent/${id}`)
       setMessage('Student deleted successfully')
       setError('')
       fetchStudents()
@@ -95,3 +95,4 @@ const ViewAllStudents = () => {
 }
 
 export default ViewAllStudents
+

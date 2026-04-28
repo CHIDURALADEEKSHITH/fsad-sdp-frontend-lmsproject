@@ -23,7 +23,7 @@ const ViewAllSubjects = () => {
 
   const handleDelete = async (coursecode) => {
     try {
-      await axios.delete(`http://localhost:2910/adminapi/deletesubject?coursecode=${coursecode}`)
+      await axios.delete(`/adminapi/deletesubject?coursecode=${coursecode}`)
       setMessage('Subject Deleted Successfully')
       setError('')
       fetchSubjects()
@@ -83,3 +83,4 @@ const ViewAllSubjects = () => {
 }
 
 export default ViewAllSubjects
+
