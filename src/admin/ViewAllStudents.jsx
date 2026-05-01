@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 import './Admin.css'
 
 const ViewAllStudents = () => {
@@ -10,7 +11,7 @@ const ViewAllStudents = () => {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get('http://localhost:2910/adminapi/viewallstudents')
+      const response = await axios.get(`${API_BASE_URL}/adminapi/viewallstudents`)
       setStudents(response.data)
     } catch (err) {
       setError('Error fetching students')

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
+import { API_BASE_URL } from '../config/api'
 import './Student.css'
 
 const SubmitProject = () => {
@@ -68,7 +69,7 @@ const SubmitProject = () => {
       formData.append('groupId', groupId)
       formData.append('studentId', student.id)
 
-      const response = await axios.post('http://localhost:2910/studentapi/submitproject', formData, {
+      const response = await axios.post(`${API_BASE_URL}/studentapi/submitproject`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },

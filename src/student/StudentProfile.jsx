@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 import './Student.css'
 
 const StudentProfile = () => {
@@ -21,7 +22,7 @@ const StudentProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.post('http://localhost:2910/studentapi/updateprofile', formData)
+      const response = await axios.post(`${API_BASE_URL}/studentapi/updateprofile`, formData)
       setMessage(response.data)
       setError('')
       sessionStorage.setItem('loggedInStudent', JSON.stringify({ ...student, ...formData }))

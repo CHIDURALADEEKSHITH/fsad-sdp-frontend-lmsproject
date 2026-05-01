@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { API_BASE_URL } from '../config/api'
 import './Style.css'
 import { useAuth } from '../context/AuthContext'
 
@@ -14,7 +15,7 @@ const StudentLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.post('http://localhost:2910/studentapi/login', formData)
+      const response = await axios.post(`${API_BASE_URL}/studentapi/login`, formData)
       if (response.status === 200) {
         sessionStorage.setItem('loggedInStudent', JSON.stringify(response.data))
         loginAs('student')

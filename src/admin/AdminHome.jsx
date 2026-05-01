@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 import './Admin.css'
 
 const AdminHome = () => {
@@ -14,9 +15,9 @@ const AdminHome = () => {
     const fetchCounts = async () => {
       try {
         const [studentsRes, teachersRes, subjectsRes] = await Promise.all([
-          axios.get('http://localhost:2910/adminapi/totalstudents'),
-          axios.get('http://localhost:2910/adminapi/totalteachers'),
-          axios.get('http://localhost:2910/adminapi/viewallsubjects')
+          axios.get(`${API_BASE_URL}/adminapi/totalstudents`),
+          axios.get(`${API_BASE_URL}/adminapi/totalteachers`),
+          axios.get(`${API_BASE_URL}/adminapi/viewallsubjects`)
         ])
         setTotalStudents(studentsRes.data)
         setTotalTeachers(teachersRes.data)

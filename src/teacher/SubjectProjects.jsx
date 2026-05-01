@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 import './Teacher.css'
-
-const API = 'http://localhost:2910'
 
 const SubjectProjects = () => {
   const { coursecode } = useParams()
@@ -24,7 +23,7 @@ const SubjectProjects = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get(`${API}/teacherapi/viewprojectsbysubject`, {
+      const response = await axios.get(`${API_BASE_URL}/teacherapi/viewprojectsbysubject`, {
         params: { coursecode }
       })
       setProjects(response.data)
@@ -74,7 +73,7 @@ const SubjectProjects = () => {
         data.append('file', file)
       }
 
-      const response = await axios.post(`${API}/teacherapi/addprojectwithfile`, data, {
+      const response = await axios.post(`${API_BASE_URL}/teacherapi/addprojectwithfile`, data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -92,7 +91,7 @@ const SubjectProjects = () => {
 
   const handleDelete = async (projectId) => {
     try {
-      await axios.delete(`${API}/teacherapi/deleteproject`, {
+      await axios.delete(`${API_BASE_URL}/teacherapi/deleteproject`, {
         params: { projectId }
       })
       setMessage('Project Deleted Successfully')

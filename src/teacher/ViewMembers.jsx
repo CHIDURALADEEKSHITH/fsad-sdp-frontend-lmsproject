@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 import './Teacher.css'
 
 const ViewMembers = () => {
@@ -12,7 +13,7 @@ const ViewMembers = () => {
   useEffect(() => {
     const fetchMembers = async () => {
       try {
-        const response = await axios.get('http://localhost:2910/teacherapi/viewmembersbygroup', {
+        const response = await axios.get(`${API_BASE_URL}/teacherapi/viewmembersbygroup`, {
           params: { groupId }
         })
         setStudents(response.data)

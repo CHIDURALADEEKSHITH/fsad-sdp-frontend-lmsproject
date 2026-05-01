@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 import './Student.css'
-
-const API = 'http://localhost:2910'
 
 const SubjectProjects = () => {
   const { coursecode } = useParams()
@@ -19,7 +18,7 @@ const SubjectProjects = () => {
       setError('')
 
       try {
-        const response = await axios.get(`${API}/studentapi/viewprojectsbysubject`, {
+        const response = await axios.get(`${API_BASE_URL}/studentapi/viewprojectsbysubject`, {
           params: { coursecode }
         })
         setProjects(response.data)

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 import './Teacher.css'
 
 const TeacherProfile = () => {
@@ -22,7 +23,7 @@ const TeacherProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.post('http://localhost:2910/teacherapi/updateprofile', formData)
+      const response = await axios.post(`${API_BASE_URL}/teacherapi/updateprofile`, formData)
       setMessage(response.data)
       setError('')
       sessionStorage.setItem('loggedInTeacher', JSON.stringify({ ...teacher, ...formData }))

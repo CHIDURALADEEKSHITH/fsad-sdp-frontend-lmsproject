@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 import './Teacher.css'
 
 const ProjectGroups = () => {
@@ -29,7 +30,7 @@ const ProjectGroups = () => {
 
   const fetchGroups = async () => {
     try {
-      const response = await axios.get('http://localhost:2910/teacherapi/viewgroupsbyproject', {
+      const response = await axios.get(`${API_BASE_URL}/teacherapi/viewgroupsbyproject`, {
         params: { projectId }
       })
       setGroups(Array.isArray(response.data) ? response.data : [])
@@ -50,7 +51,7 @@ const ProjectGroups = () => {
 
   const handleCreateGroup = async () => {
     try {
-      const response = await axios.post('http://localhost:2910/teacherapi/creategroup', null, {
+      const response = await axios.post(`${API_BASE_URL}/teacherapi/creategroup`, null, {
         params: { projectId, maxMembers }
       })
       setMessage(response.data)
@@ -63,7 +64,7 @@ const ProjectGroups = () => {
 
   const handleDeleteGroup = async (groupId) => {
     try {
-      await axios.delete('http://localhost:2910/teacherapi/deletegroup', {
+      await axios.delete(`${API_BASE_URL}/teacherapi/deletegroup`, {
         params: { groupId }
       })
       setMessage('Group Deleted Successfully')
@@ -81,7 +82,7 @@ const ProjectGroups = () => {
     setErrorMembers('')
 
     try {
-      const response = await axios.get('http://localhost:2910/teacherapi/viewmembersbygroup', {
+      const response = await axios.get(`${API_BASE_URL}/teacherapi/viewmembersbygroup`, {
         params: { groupId }
       })
       setMembers(response.data || [])
@@ -95,7 +96,7 @@ const ProjectGroups = () => {
 
   const handleAssignLeader = async (groupId, studentId) => {
     try {
-      const response = await axios.post('http://localhost:2910/teacherapi/assignleader', null, {
+      const response = await axios.post(`${API_BASE_URL}/teacherapi/assignleader`, null, {
         params: { groupId, studentId }
       })
 
@@ -119,7 +120,7 @@ const ProjectGroups = () => {
     setShowSubmissions(true)
 
     try {
-      const response = await axios.get('http://localhost:2910/studentapi/viewsubmissionsbygroup', {
+      const response = await axios.get(`${API_BASE_URL}/studentapi/viewsubmissionsbygroup`, {
         params: { groupId }
       })
       setSubmissions(response.data || [])
@@ -133,7 +134,7 @@ const ProjectGroups = () => {
 
   const downloadSubmission = async (submissionId, fileName) => {
     try {
-      const response = await axios.get('http://localhost:2910/teacherapi/downloadsubmission', {
+      const response = await axios.get(`${API_BASE_URL}/teacherapi/downloadsubmission`, {
         params: { submissionId },
         responseType: 'blob'
       })
@@ -166,7 +167,7 @@ const ProjectGroups = () => {
     setEvaluating(true)
 
     try {
-      const response = await axios.post('http://localhost:2910/teacherapi/evaluatesubmission', null, {
+      const response = await axios.post(`${API_BASE_URL}/teacherapi/evaluatesubmission`, null, {
         params: {
           submissionId: evaluatingSubmission.id,
           marks: parseInt(marks),
@@ -180,7 +181,7 @@ const ProjectGroups = () => {
       setMarks('')
       setFeedback('')
 
-      const subResponse = await axios.get('http://localhost:2910/studentapi/viewsubmissionsbygroup', {
+      const subResponse = await axios.get(`${API_BASE_URL}/studentapi/viewsubmissionsbygroup`, {
         params: { groupId: selectedGroupId }
       })
       setSubmissions(subResponse.data || [])

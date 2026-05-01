@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { API_BASE_URL } from '../config/api'
 import './Style.css'
 import { useAuth } from '../context/AuthContext'
 
@@ -14,7 +15,7 @@ const TeacherLogin = () => {
   const handleSubmit = async (e) => {
      e.preventDefault() //
     try {
-      const response = await axios.post('http://localhost:2910/teacherapi/login', formData)
+      const response = await axios.post(`${API_BASE_URL}/teacherapi/login`, formData)
       if (response.status === 200) {
         sessionStorage.setItem('loggedInTeacher', JSON.stringify(response.data))
         loginAs('teacher')

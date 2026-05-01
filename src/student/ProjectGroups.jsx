@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { API_BASE_URL } from '../config/api'
 import './Student.css'
-
-const API = 'http://localhost:2910'
 
 const ProjectGroups = () => {
   const { projectId } = useParams()
@@ -23,7 +22,7 @@ const ProjectGroups = () => {
   // ---------------- FETCH GROUPS ----------------
   const fetchGroups = async () => {
     try {
-      const res = await axios.get(`${API}/studentapi/viewgroupsbyproject`, {
+      const res = await axios.get(`${API_BASE_URL}/studentapi/viewgroupsbyproject`, {
         params: { projectId }
       })
 
